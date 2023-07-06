@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+'use client';
+import { useEffect, useRef, useState } from 'react';
 import useSocket from './useSocket';
 import type { ClientSocket } from './types';
 
@@ -14,7 +15,9 @@ const useRoom = (roomName: string) => {
   const { socketRef } = useSocket();
   const [isHost, setIsHost] = useState(false);
   const streamRef = useRef<MediaStream | null>();
-  const videoRef = useRef<HTMLVideoElement>();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const peerVideoRef = useRef<HTMLVideoElement | null>(null);
+
   const rtcConnectionRef = useRef<RTCPeerConnection | null>();
 
   const joinRoom = () => {
@@ -40,8 +43,16 @@ const useRoom = (roomName: string) => {
     }
   };
 
-  const handleICECandidateEvent = () => {};
-  const handleTrackEvent = () => {};
+  const handleICECandidateEvent: RTCPeerConnection['onicecandidate'] = (
+    event
+  ) => {
+    if (event.candidate) {
+      socketRef.current.emit('ice-candidate', event.candidate, roomName);
+    }
+  };
+  const handleTrackEvent: RTCPeerConnection['ontrack'] = (event) => {
+    if (peerVideoRef.current) peerVideoRef.current.srcObject = event.streams[0];
+  };
   const createPeerConnection = () => {
     const connection = new RTCPeerConnection(ICE_SERVERS);
     connection.onicecandidate = handleICECandidateEvent;
@@ -104,8 +115,15 @@ const useRoom = (roomName: string) => {
       });
     }
   };
-  const handleAnswer = () => {};
-  const handlerNewIceCandidateMsg = () => {};
+  const handleAnswer = (answer: RTCSessionDescriptionInit) => {
+    rtcConnectionRef.current?.setRemoteDescription(answer);
+  };
+  const handlerNewIceCandidateMsg = (incoming: RTCIceCandidate) => {
+    const candidate = new RTCIceCandidate(incoming);
+    rtcConnectionRef.current
+      ?.addIceCandidate(candidate)
+      .catch((e) => console.log(e));
+  };
 
   const bindSocketEvent = (socket: ClientSocket) => {
     socket.on('created', handleRoomCreated);
@@ -128,6 +146,7 @@ const useRoom = (roomName: string) => {
 
   return {
     videoRef,
+    peerVideoRef,
     streamRef,
   };
 };
