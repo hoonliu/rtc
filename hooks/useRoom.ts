@@ -1,11 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useSocket from './useSocket';
 import type { ClientSocket } from './types';
 
+const ICE_SERVERS = {
+  iceServers: [
+    {
+      urls: 'stun:openrelay.metered.ca:80',
+    },
+  ],
+};
+
 const useRoom = (roomName: string) => {
   const { socketRef } = useSocket();
+  const [isHost, setIsHost] = useState(false);
   const streamRef = useRef<MediaStream | null>();
   const videoRef = useRef<HTMLVideoElement>();
+  const rtcConnectionRef = useRef<RTCPeerConnection | null>();
 
   const joinRoom = () => {
     socketRef.current.emit('join', roomName);
@@ -30,14 +40,44 @@ const useRoom = (roomName: string) => {
     }
   };
 
+  const handleICECandidateEvent = () => {};
+  const handleTrackEvent = () => {};
+  const createPeerConnection = () => {
+    const connection = new RTCPeerConnection(ICE_SERVERS);
+    connection.onicecandidate = handleICECandidateEvent;
+    connection.ontrack = handleTrackEvent;
+    return connection;
+  };
+
   const handleRoomCreated = () => {
+    setIsHost(true);
     getUserMedia();
   };
   const handleRoomJoined = () => {
     getUserMedia();
     socketRef.current.emit('ready', roomName);
   };
-  const initiateCall = () => {};
+  const initiateCall = () => {
+    if (isHost) {
+      rtcConnectionRef.current = createPeerConnection();
+      if (streamRef.current) {
+        rtcConnectionRef.current.addTrack(
+          streamRef.current.getTracks()[0],
+          streamRef.current
+        );
+        rtcConnectionRef.current.addTrack(
+          streamRef.current.getTracks()[1],
+          streamRef.current
+        );
+        rtcConnectionRef.current.createOffer().then((offer) => {
+          rtcConnectionRef.current?.setLocalDescription(offer),
+            socketRef.current.emit('offer', offer, roomName);
+        });
+      } else {
+        throw new Error('stream is not ready');
+      }
+    }
+  };
   const onPeerLeave = () => {};
   const handleRoomFull = () => {};
 
