@@ -15,8 +15,8 @@ interface NextApiResponseWithSocket extends NextApiResponse {
   socket: SocketWithIO;
 }
 
-const SocketHandler = (req: NextApiRequest, res: NextApiResponseWithSocket) => {
-  if (res.socket.server.io) {
+export const GET = (req: NextApiRequest, res: NextApiResponseWithSocket) => {
+  if (res.socket?.server?.io) {
     console.log('Socket is already attached');
     return res.end();
   }
@@ -78,5 +78,3 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseWithSocket) => {
   });
   return res.end();
 };
-
-export default SocketHandler;
