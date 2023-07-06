@@ -81,7 +81,29 @@ const useRoom = (roomName: string) => {
   const onPeerLeave = () => {};
   const handleRoomFull = () => {};
 
-  const handleReceivedOffer = () => {};
+  const handleReceivedOffer = (offer: RTCSessionDescriptionInit) => {
+    if (!isHost) {
+      rtcConnectionRef.current = createPeerConnection();
+      if (streamRef.current) {
+        rtcConnectionRef.current.addTrack(
+          streamRef.current.getTracks()[0],
+          streamRef.current
+        );
+        rtcConnectionRef.current.addTrack(
+          streamRef.current.getTracks()[1],
+          streamRef.current
+        );
+      } else {
+        throw new Error('stream is not ready');
+      }
+      rtcConnectionRef.current.setRemoteDescription(offer);
+
+      rtcConnectionRef.current.createAnswer().then((answer) => {
+        rtcConnectionRef.current?.setLocalDescription(answer);
+        socketRef.current.emit('answer', answer, roomName);
+      });
+    }
+  };
   const handleAnswer = () => {};
   const handlerNewIceCandidateMsg = () => {};
 
