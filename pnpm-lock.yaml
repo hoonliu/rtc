@@ -20,6 +20,9 @@ dependencies:
   autoprefixer:
     specifier: 10.4.14
     version: registry.npmmirror.com/autoprefixer@10.4.14(postcss@8.4.24)
+  bufferutil:
+    specifier: ^4.0.7
+    version: registry.npmmirror.com/bufferutil@4.0.7
   class-variance-authority:
     specifier: ^0.6.1
     version: registry.npmmirror.com/class-variance-authority@0.6.1
@@ -55,10 +58,10 @@ dependencies:
     version: registry.npmmirror.com/react-dom@18.2.0(react@18.2.0)
   socket.io:
     specifier: ^4.7.1
-    version: registry.npmmirror.com/socket.io@4.7.1
+    version: registry.npmmirror.com/socket.io@4.7.1(bufferutil@4.0.7)(utf-8-validate@6.0.3)
   socket.io-client:
     specifier: ^4.7.1
-    version: registry.npmmirror.com/socket.io-client@4.7.1
+    version: registry.npmmirror.com/socket.io-client@4.7.1(bufferutil@4.0.7)(utf-8-validate@6.0.3)
   tailwind-merge:
     specifier: ^1.13.2
     version: registry.npmmirror.com/tailwind-merge@1.13.2
@@ -71,6 +74,9 @@ dependencies:
   typescript:
     specifier: 5.1.5
     version: registry.npmmirror.com/typescript@5.1.5
+  utf-8-validate:
+    specifier: ^6.0.3
+    version: registry.npmmirror.com/utf-8-validate@6.0.3
 
 devDependencies:
   shadcn-ui:
@@ -939,6 +945,16 @@ packages:
       ieee754: registry.npmmirror.com/ieee754@1.2.1
     dev: true
 
+  registry.npmmirror.com/bufferutil@4.0.7:
+    resolution: {integrity: sha512-kukuqc39WOHtdxtw4UScxF/WVnMFVSQVKhtx3AjZJzhd0RGZZldcrfSEbVsWWe6KNH253574cq5F+wpv0G9pJw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/bufferutil/-/bufferutil-4.0.7.tgz}
+    name: bufferutil
+    version: 4.0.7
+    engines: {node: '>=6.14.2'}
+    requiresBuild: true
+    dependencies:
+      node-gyp-build: registry.npmmirror.com/node-gyp-build@4.6.0
+    dev: false
+
   registry.npmmirror.com/bundle-name@3.0.0:
     resolution: {integrity: sha512-PKA4BeSvBpQKQ8iPOGCSiell+N8P+Tf1DlwqmYhpe2gAhKPHn8EYOxVT+ShuGmhg8lN8XiSlS80yiExKXrURlw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/bundle-name/-/bundle-name-3.0.0.tgz}
     name: bundle-name
@@ -1333,15 +1349,16 @@ packages:
     version: 9.2.2
     dev: false
 
-  registry.npmmirror.com/engine.io-client@6.5.1:
+  registry.npmmirror.com/engine.io-client@6.5.1(bufferutil@4.0.7)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-hE5wKXH8Ru4L19MbM1GgYV/2Qo54JSMh1rlJbfpa40bEWkCKNo3ol2eOtGmowcr+ysgbI7+SGL+by42Q3pt/Ng==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/engine.io-client/-/engine.io-client-6.5.1.tgz}
+    id: registry.npmmirror.com/engine.io-client/6.5.1
     name: engine.io-client
     version: 6.5.1
     dependencies:
       '@socket.io/component-emitter': registry.npmmirror.com/@socket.io/component-emitter@3.1.0
       debug: registry.npmmirror.com/debug@4.3.4
       engine.io-parser: registry.npmmirror.com/engine.io-parser@5.1.0
-      ws: registry.npmmirror.com/ws@8.11.0
+      ws: registry.npmmirror.com/ws@8.11.0(bufferutil@4.0.7)(utf-8-validate@6.0.3)
       xmlhttprequest-ssl: registry.npmmirror.com/xmlhttprequest-ssl@2.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -1356,8 +1373,9 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: false
 
-  registry.npmmirror.com/engine.io@6.5.1:
+  registry.npmmirror.com/engine.io@6.5.1(bufferutil@4.0.7)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-mGqhI+D7YxS9KJMppR6Iuo37Ed3abhU8NdfgSvJSDUafQutrN+sPTncJYTyM9+tkhSmWodKtVYGPPHyXJEwEQA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/engine.io/-/engine.io-6.5.1.tgz}
+    id: registry.npmmirror.com/engine.io/6.5.1
     name: engine.io
     version: 6.5.1
     engines: {node: '>=10.0.0'}
@@ -1371,7 +1389,7 @@ packages:
       cors: registry.npmmirror.com/cors@2.8.5
       debug: registry.npmmirror.com/debug@4.3.4
       engine.io-parser: registry.npmmirror.com/engine.io-parser@5.1.0
-      ws: registry.npmmirror.com/ws@8.11.0
+      ws: registry.npmmirror.com/ws@8.11.0(bufferutil@4.0.7)(utf-8-validate@6.0.3)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -2912,6 +2930,13 @@ packages:
       formdata-polyfill: registry.npmmirror.com/formdata-polyfill@4.0.10
     dev: true
 
+  registry.npmmirror.com/node-gyp-build@4.6.0:
+    resolution: {integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/node-gyp-build/-/node-gyp-build-4.6.0.tgz}
+    name: node-gyp-build
+    version: 4.6.0
+    hasBin: true
+    dev: false
+
   registry.npmmirror.com/node-releases@2.0.12:
     resolution: {integrity: sha512-QzsYKWhXTWx8h1kIvqfnC++o0pEmpRQA/aenALsL2F4pqNVr7YzcdMlDij5WBnwftRbJCNJL/O7zdKaxKPHqgQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/node-releases/-/node-releases-2.0.12.tgz}
     name: node-releases
@@ -3605,26 +3630,28 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  registry.npmmirror.com/socket.io-adapter@2.5.2:
+  registry.npmmirror.com/socket.io-adapter@2.5.2(bufferutil@4.0.7)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-87C3LO/NOMc+eMcpcxUBebGjkpMDkNBS9tf7KJqcDsmL936EChtVva71Dw2q4tQcuVC+hAUy4an2NO/sYXmwRA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/socket.io-adapter/-/socket.io-adapter-2.5.2.tgz}
+    id: registry.npmmirror.com/socket.io-adapter/2.5.2
     name: socket.io-adapter
     version: 2.5.2
     dependencies:
-      ws: registry.npmmirror.com/ws@8.11.0
+      ws: registry.npmmirror.com/ws@8.11.0(bufferutil@4.0.7)(utf-8-validate@6.0.3)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
     dev: false
 
-  registry.npmmirror.com/socket.io-client@4.7.1:
+  registry.npmmirror.com/socket.io-client@4.7.1(bufferutil@4.0.7)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-Qk3Xj8ekbnzKu3faejo4wk2MzXA029XppiXtTF/PkbTg+fcwaTw1PlDrTrrrU4mKoYC4dvlApOnSeyLCKwek2w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/socket.io-client/-/socket.io-client-4.7.1.tgz}
+    id: registry.npmmirror.com/socket.io-client/4.7.1
     name: socket.io-client
     version: 4.7.1
     engines: {node: '>=10.0.0'}
     dependencies:
       '@socket.io/component-emitter': registry.npmmirror.com/@socket.io/component-emitter@3.1.0
       debug: registry.npmmirror.com/debug@4.3.4
-      engine.io-client: registry.npmmirror.com/engine.io-client@6.5.1
+      engine.io-client: registry.npmmirror.com/engine.io-client@6.5.1(bufferutil@4.0.7)(utf-8-validate@6.0.3)
       socket.io-parser: registry.npmmirror.com/socket.io-parser@4.2.4
     transitivePeerDependencies:
       - bufferutil
@@ -3644,8 +3671,9 @@ packages:
       - supports-color
     dev: false
 
-  registry.npmmirror.com/socket.io@4.7.1:
+  registry.npmmirror.com/socket.io@4.7.1(bufferutil@4.0.7)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-W+utHys2w//dhFjy7iQQu9sGd3eokCjGbl2r59tyLqNiJJBdIebn3GAKEXBr3osqHTObJi2die/25bCx2zsaaw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/socket.io/-/socket.io-4.7.1.tgz}
+    id: registry.npmmirror.com/socket.io/4.7.1
     name: socket.io
     version: 4.7.1
     engines: {node: '>=10.0.0'}
@@ -3654,8 +3682,8 @@ packages:
       base64id: registry.npmmirror.com/base64id@2.0.0
       cors: registry.npmmirror.com/cors@2.8.5
       debug: registry.npmmirror.com/debug@4.3.4
-      engine.io: registry.npmmirror.com/engine.io@6.5.1
-      socket.io-adapter: registry.npmmirror.com/socket.io-adapter@2.5.2
+      engine.io: registry.npmmirror.com/engine.io@6.5.1(bufferutil@4.0.7)(utf-8-validate@6.0.3)
+      socket.io-adapter: registry.npmmirror.com/socket.io-adapter@2.5.2(bufferutil@4.0.7)(utf-8-validate@6.0.3)
       socket.io-parser: registry.npmmirror.com/socket.io-parser@4.2.4
     transitivePeerDependencies:
       - bufferutil
@@ -4094,6 +4122,16 @@ packages:
       punycode: registry.npmmirror.com/punycode@2.3.0
     dev: false
 
+  registry.npmmirror.com/utf-8-validate@6.0.3:
+    resolution: {integrity: sha512-uIuGf9TWQ/y+0Lp+KGZCMuJWc3N9BHA+l/UmHd/oUHwJJDeysyTRxNQVkbzsIWfGFbRe3OcgML/i0mvVRPOyDA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/utf-8-validate/-/utf-8-validate-6.0.3.tgz}
+    name: utf-8-validate
+    version: 6.0.3
+    engines: {node: '>=6.14.2'}
+    requiresBuild: true
+    dependencies:
+      node-gyp-build: registry.npmmirror.com/node-gyp-build@4.6.0
+    dev: false
+
   registry.npmmirror.com/util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/util-deprecate/-/util-deprecate-1.0.2.tgz}
     name: util-deprecate
@@ -4172,8 +4210,9 @@ packages:
     version: 1.0.2
     dev: false
 
-  registry.npmmirror.com/ws@8.11.0:
+  registry.npmmirror.com/ws@8.11.0(bufferutil@4.0.7)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ws/-/ws-8.11.0.tgz}
+    id: registry.npmmirror.com/ws/8.11.0
     name: ws
     version: 8.11.0
     engines: {node: '>=10.0.0'}
@@ -4185,6 +4224,9 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dependencies:
+      bufferutil: registry.npmmirror.com/bufferutil@4.0.7
+      utf-8-validate: registry.npmmirror.com/utf-8-validate@6.0.3
     dev: false
 
   registry.npmmirror.com/xmlhttprequest-ssl@2.0.0:
