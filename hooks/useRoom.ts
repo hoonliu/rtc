@@ -13,7 +13,8 @@ const ICE_SERVERS = {
 
 const useRoom = (roomName: string) => {
   const { socketRef } = useSocket();
-  const [isHost, setIsHost] = useState(false);
+  // const [isHost, setIsHost] = useState(false);
+  const hostRef = useRef<boolean>(false);
   const streamRef = useRef<MediaStream | null>();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const peerVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -25,6 +26,7 @@ const useRoom = (roomName: string) => {
   };
 
   const getUserMedia = async () => {
+    console.log('getting stream...');
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: {
@@ -32,12 +34,14 @@ const useRoom = (roomName: string) => {
         height: 500,
       },
     });
+    console.log('setting stream to video ref and stream ref...');
     streamRef.current = stream;
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
       videoRef.current.onloadedmetadata = () => {
-        videoRef.current?.play;
+        videoRef.current?.play();
       };
+      console.log('video object setup complete');
     } else {
       throw new Error('The video element is not ready');
     }
@@ -46,32 +50,45 @@ const useRoom = (roomName: string) => {
   const handleICECandidateEvent: RTCPeerConnection['onicecandidate'] = (
     event
   ) => {
+    console.log('handleICECandidateEvent', { event });
     if (event.candidate) {
       socketRef.current.emit('ice-candidate', event.candidate, roomName);
     }
   };
   const handleTrackEvent: RTCPeerConnection['ontrack'] = (event) => {
+    console.log('handleTrackEvent', { event });
     if (peerVideoRef.current) peerVideoRef.current.srcObject = event.streams[0];
   };
   const createPeerConnection = () => {
-    const connection = new RTCPeerConnection(ICE_SERVERS);
-    connection.onicecandidate = handleICECandidateEvent;
-    connection.ontrack = handleTrackEvent;
-    return connection;
+    console.log('creating peer connection...');
+    try {
+      const connection = new RTCPeerConnection(ICE_SERVERS);
+      connection.onicecandidate = handleICECandidateEvent;
+      connection.ontrack = handleTrackEvent;
+      console.log('create peer connection successfully!');
+      return connection;
+    } catch (error) {
+      console.log('create peer connection failed', error);
+    }
   };
 
   const handleRoomCreated = () => {
-    setIsHost(true);
+    console.log('room created. getting user media...');
+    hostRef.current = true;
     getUserMedia();
   };
   const handleRoomJoined = () => {
+    console.log('room joined. getting user media...');
     getUserMedia();
+    console.log('emitting ready event...', { roomName });
     socketRef.current.emit('ready', roomName);
+    console.log('emit ready event successfully');
   };
   const initiateCall = () => {
-    if (isHost) {
+    console.log({ host: hostRef.current }, 'initiating call');
+    if (hostRef.current) {
       rtcConnectionRef.current = createPeerConnection();
-      if (streamRef.current) {
+      if (streamRef.current && rtcConnectionRef.current) {
         rtcConnectionRef.current.addTrack(
           streamRef.current.getTracks()[0],
           streamRef.current
@@ -85,7 +102,7 @@ const useRoom = (roomName: string) => {
             socketRef.current.emit('offer', offer, roomName);
         });
       } else {
-        throw new Error('stream is not ready');
+        throw new Error('stream or rtc connection is not ready');
       }
     }
   };
@@ -93,9 +110,10 @@ const useRoom = (roomName: string) => {
   const handleRoomFull = () => {};
 
   const handleReceivedOffer = (offer: RTCSessionDescriptionInit) => {
-    if (!isHost) {
+    console.log({ host: hostRef.current }, 'handling offer');
+    if (!hostRef.current) {
       rtcConnectionRef.current = createPeerConnection();
-      if (streamRef.current) {
+      if (streamRef.current && rtcConnectionRef.current) {
         rtcConnectionRef.current.addTrack(
           streamRef.current.getTracks()[0],
           streamRef.current
@@ -105,7 +123,7 @@ const useRoom = (roomName: string) => {
           streamRef.current
         );
       } else {
-        throw new Error('stream is not ready');
+        throw new Error('stream or rtc connection is not ready');
       }
       rtcConnectionRef.current.setRemoteDescription(offer);
 
