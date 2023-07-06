@@ -8,7 +8,12 @@ const socketInitializer = async () => {
 
 const useSocket = () => {
   const socketCreated = useRef(false);
-  const socketRef = useRef<ClientSocket>(io());
+  const socketRef = useRef<ClientSocket>(
+    io({
+      path: '/api/socket_io',
+      addTrailingSlash: false,
+    })
+  );
 
   const initializeSocket = () => {
     if (!socketCreated.current) {
