@@ -50,13 +50,13 @@ const useRoom = (roomName: string) => {
   const handleICECandidateEvent: RTCPeerConnection['onicecandidate'] = (
     event
   ) => {
-    console.log('handleICECandidateEvent', { event });
+    // console.log('handleICECandidateEvent', { event });
     if (event.candidate) {
       socketRef.current.emit('ice-candidate', event.candidate, roomName);
     }
   };
   const handleTrackEvent: RTCPeerConnection['ontrack'] = (event) => {
-    console.log('handleTrackEvent', { event });
+    // console.log('handleTrackEvent', { event });
     if (peerVideoRef.current) peerVideoRef.current.srcObject = event.streams[0];
   };
   const createPeerConnection = () => {
@@ -72,14 +72,14 @@ const useRoom = (roomName: string) => {
     }
   };
 
-  const handleRoomCreated = () => {
+  const handleRoomCreated = async () => {
     console.log('room created. getting user media...');
     hostRef.current = true;
-    getUserMedia();
+    await getUserMedia();
   };
-  const handleRoomJoined = () => {
+  const handleRoomJoined = async () => {
     console.log('room joined. getting user media...');
-    getUserMedia();
+    await getUserMedia();
     console.log('emitting ready event...', { roomName });
     socketRef.current.emit('ready', roomName);
     console.log('emit ready event successfully');

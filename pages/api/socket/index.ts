@@ -64,7 +64,7 @@ const GET = (req: NextApiRequest, res: NextApiResponseWithSocket) => {
     socket.on(
       'ice-candidate',
       (candidate: RTCIceCandidate, roomName: string) => {
-        console.log({ candidate });
+        // console.log({ candidate });
         socket.broadcast.to(roomName).emit('ice-candidate', candidate); // Sends Candidate to the other peer in the room.
       }
     );
