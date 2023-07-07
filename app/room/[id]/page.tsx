@@ -9,11 +9,11 @@ const Room = ({
     id: string;
   };
 }) => {
-  const { videoRef, peerVideoRef, streamRef } = useRoom(params.id);
+  const { mediaRef, peerMediaRef } = useRoom(params.id);
   return (
     <div>
-      <video autoPlay ref={videoRef} />
-      <video autoPlay ref={peerVideoRef} />
+      <audio autoPlay ref={mediaRef} muted />
+      <audio autoPlay ref={peerMediaRef} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import useSocket from './useSocket';
 import type { ClientSocket } from './types';
 
@@ -16,8 +16,8 @@ const useRoom = (roomName: string) => {
   // const [isHost, setIsHost] = useState(false);
   const hostRef = useRef<boolean>(false);
   const streamRef = useRef<MediaStream | null>();
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const peerVideoRef = useRef<HTMLVideoElement | null>(null);
+  const mediaRef = useRef<HTMLAudioElement | null>(null);
+  const peerMediaRef = useRef<HTMLAudioElement | null>(null);
 
   const rtcConnectionRef = useRef<RTCPeerConnection | null>();
 
@@ -29,17 +29,17 @@ const useRoom = (roomName: string) => {
     console.log('getting stream...');
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
-      video: {
-        width: 500,
-        height: 500,
-      },
+      // video: {
+      //   width: 500,
+      //   height: 500,
+      // },
     });
     console.log('setting stream to video ref and stream ref...');
     streamRef.current = stream;
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      videoRef.current.onloadedmetadata = () => {
-        videoRef.current?.play();
+    if (mediaRef.current) {
+      mediaRef.current.srcObject = stream;
+      mediaRef.current.onloadedmetadata = () => {
+        mediaRef.current?.play();
       };
       console.log('video object setup complete');
     } else {
@@ -57,7 +57,7 @@ const useRoom = (roomName: string) => {
   };
   const handleTrackEvent: RTCPeerConnection['ontrack'] = (event) => {
     // console.log('handleTrackEvent', { event });
-    if (peerVideoRef.current) peerVideoRef.current.srcObject = event.streams[0];
+    if (peerMediaRef.current) peerMediaRef.current.srcObject = event.streams[0];
   };
   const createPeerConnection = () => {
     console.log('creating peer connection...');
@@ -93,10 +93,10 @@ const useRoom = (roomName: string) => {
           streamRef.current.getTracks()[0],
           streamRef.current
         );
-        rtcConnectionRef.current.addTrack(
-          streamRef.current.getTracks()[1],
-          streamRef.current
-        );
+        // rtcConnectionRef.current.addTrack(
+        //   streamRef.current.getTracks()[1],
+        //   streamRef.current
+        // );
         rtcConnectionRef.current.createOffer().then((offer) => {
           rtcConnectionRef.current?.setLocalDescription(offer),
             socketRef.current.emit('offer', offer, roomName);
@@ -118,15 +118,14 @@ const useRoom = (roomName: string) => {
           streamRef.current.getTracks()[0],
           streamRef.current
         );
-        rtcConnectionRef.current.addTrack(
-          streamRef.current.getTracks()[1],
-          streamRef.current
-        );
+        // rtcConnectionRef.current.addTrack(
+        //   streamRef.current.getTracks()[1],
+        //   streamRef.current
+        // );
       } else {
         throw new Error('stream or rtc connection is not ready');
       }
       rtcConnectionRef.current.setRemoteDescription(offer);
-
       rtcConnectionRef.current.createAnswer().then((answer) => {
         rtcConnectionRef.current?.setLocalDescription(answer);
         socketRef.current.emit('answer', answer, roomName);
@@ -163,8 +162,8 @@ const useRoom = (roomName: string) => {
   }, []);
 
   return {
-    videoRef,
-    peerVideoRef,
+    mediaRef,
+    peerMediaRef,
     streamRef,
   };
 };
